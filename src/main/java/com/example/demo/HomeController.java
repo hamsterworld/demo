@@ -9,11 +9,10 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class HomeController {
 
-    @GetMapping("/hello")
-    public ModelAndView gohome(){
+    @GetMapping("/login")
+    public String login(){
 
-        System.out.println("여긴잘왓나11");
-        return new ModelAndView("index");
+        return "login_form";
 
     }
 
