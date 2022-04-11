@@ -1,7 +1,10 @@
 package com.example.demo.login.loginrepository;
 
-import org.springframework.stereotype.Repository;
+import com.example.demo.dto.Member;
 
-@Repository
-public class LoginRepository {
+public interface LoginRepository {
+
+    public boolean FindByUserId(Member member);
+
+
 }

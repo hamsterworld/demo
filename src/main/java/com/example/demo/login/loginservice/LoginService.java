@@ -1,7 +1,9 @@
 package com.example.demo.login.loginservice;
 
-import org.springframework.stereotype.Service;
+import com.example.demo.dto.Member;
 
-@Service
-public class LoginService {
+public interface LoginService {
+
+    public boolean PassId(Member member);
+
 }
