@@ -18,7 +18,6 @@ public class DemoController {
     public List<Board> getBoardList() {
         System.out.println("여긴잘왓나");
         return boardMapper.selectList();
-
     }
 
 }
