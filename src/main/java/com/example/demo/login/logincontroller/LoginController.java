@@ -1,5 +1,4 @@
-package com.example.demo;
-
+package com.example.demo.login.logincontroller;
 
 
 import org.springframework.stereotype.Controller;
@@ -22,6 +21,5 @@ public class LoginController {
 
         return "redirect:/"; //내가 일단 기본홈페이지로 보내는 방식이다.
     }
-
 
 }
