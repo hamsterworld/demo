@@ -3,13 +3,17 @@ package com.example.demo.login.logincontroller;
 
 import com.example.demo.dto.Member;
 import com.example.demo.login.loginservice.LoginService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
+@Slf4j
 public class LoginController {
 
 
@@ -17,10 +21,7 @@ public class LoginController {
     LoginService loginService;
 
     @GetMapping("/login")
-    public String login(){
-
-
-
+    public String login(@ModelAttribute Member member){
 
         return "login_form";
 
@@ -28,11 +29,16 @@ public class LoginController {
 
 
     @PostMapping("/login")
-    public String postlogin(@ModelAttribute Member member){
+    public String postlogin(@Validated @ModelAttribute Member member, BindingResult bindingResult){
 
-        System.out.println("UserId = " + member.getUserId());
+        if(bindingResult.hasErrors()){
 
-        System.out.println("UserPassword = " + member.getUserPassword());
+            log.info("error가 있네요.");
+
+            return "login_form";
+
+        }
+
 
         if(loginService.PassId(member)){
 
