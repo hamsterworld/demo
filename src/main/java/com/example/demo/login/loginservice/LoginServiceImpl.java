@@ -1,22 +1,35 @@
 package com.example.demo.login.loginservice;
 
 import com.example.demo.dto.Member;
+import com.example.demo.dto.MemberLoginForm;
 import com.example.demo.login.loginrepository.LoginRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
+
 @Service
+@Slf4j
 public class LoginServiceImpl implements LoginService {
 
     @Autowired
-    LoginRepository LoginRepository;
+    LoginRepository loginRepository;
 
     @Override
-    public boolean PassId(Member member) {
+    public Member login(MemberLoginForm memberloginform, HttpServletRequest request) {
 
-        System.out.println(" member = " + member);
+        log.info(" MemberLoginForm = {} " + memberloginform);
 
-        return LoginRepository.FindByUserId(member);
+        Member member = loginRepository.LoginByUserId(memberloginform) ;
+
+        if(member != null ){
+
+            return member;
+
+        }
+
+        return null;
 
     }
 

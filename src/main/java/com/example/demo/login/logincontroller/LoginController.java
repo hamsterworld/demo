@@ -2,15 +2,22 @@ package com.example.demo.login.logincontroller;
 
 
 import com.example.demo.dto.Member;
+import com.example.demo.dto.MemberLoginForm;
+import com.example.demo.login.SessionConst;
 import com.example.demo.login.loginservice.LoginService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 @Controller
 @Slf4j
@@ -21,7 +28,9 @@ public class LoginController {
     LoginService loginService;
 
     @GetMapping("/login")
-    public String login(@ModelAttribute Member member){
+    public String login(@ModelAttribute("memberloginform") MemberLoginForm memberloginform,
+                        Model model){
+
 
         return "login_form";
 
@@ -29,28 +38,37 @@ public class LoginController {
 
 
     @PostMapping("/login")
-    public String postlogin(@Validated @ModelAttribute Member member, BindingResult bindingResult){
+    public String postlogin(@Valid @ModelAttribute("memberloginform") MemberLoginForm memberloginform,
+                            BindingResult bindingResult,
+                            HttpServletRequest request,
+                            Model model){
 
         if(bindingResult.hasErrors()){
 
-            log.info("error가 있네요.");
+            log.info("에러가 있네요. = {}",bindingResult);
 
             return "login_form";
 
         }
 
+        //아이디와 비밀번호가 맞으면 loginservice에서 검증로직을 거쳐서 member를 반환한다.
+        Member member = loginService.login(memberloginform,request);
 
-        if(loginService.PassId(member)){
+        log.info("member가 널이여야 합니다 = {} " + member);
 
-            return "redirect:/";    //login 성공 로직
+        if( member  != null ){
+
+            HttpSession session = request.getSession(false);
+            session.setAttribute(SessionConst.LOGIN_MEMBER,member);
+            model.addAttribute("member",member);
+
+            return "redirect:/";
 
         }
 
-        return "redirect:/login";
 
-        //로그인 실패 로직 다시 원래대로 돌린다.(나중에 홈페이지에 로그인에 실패했습니다.)
-        //여기서 예외를 터트려야할지? 아니면 그대로 경고메시지를 출력시킬지? 결정.
-        //따로 적을 예정이다.
+       bindingResult.reject("loginfail","아이디 및 비밀번호가 맞지 않습니다.");
+        return "login_form";
 
     }
 

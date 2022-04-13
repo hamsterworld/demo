@@ -1,48 +1,69 @@
 package com.example.demo.login.loginrepository;
 
 import com.example.demo.dto.Member;
+import com.example.demo.dto.MemberLoginForm;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.catalina.User;
 import org.springframework.stereotype.Repository;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 
-
+@Slf4j
 @Repository
 public class LoginRepositoryImpl implements LoginRepository{
 
 
     static Map<Long, Member> UserMap = new HashMap<>();
-
-    @Override
-    public boolean FindByUserId(Member member) {
+    private static long sequence = 0L;
 
 
-        Member member1 = new Member();
+    public Member LoginByUserId(MemberLoginForm memberloginform) {
 
-        member1.setUserNumber(1L);
-        member1.setUserId("ssoboro");
-        member1.setUserPassword("4863527");
-        UserMap.put(member1.getUserNumber(), member1);
 
-        Member member2 = new Member();
+        Optional<Member> loginid = findAll().stream().filter(m ->
+                m.getUserId().equals(memberloginform.getUserId())).findFirst();
 
-        member2.setUserNumber(1L);
-        member2.setUserId("hamster");
-        member2.setUserPassword("123456");
-        UserMap.put(member1.getUserNumber(), member1);
+        log.info("접속한 아이디와 일치하는가? = {} " + loginid);
 
-        for(Long mapkey : UserMap.keySet()){
+        Member member = loginid.filter(m->m.getUserPassword().equals(memberloginform.getUserPassword()))
+                .orElse(null);
 
-            System.out.println("mapkey = " + mapkey);
+        if(member != null){
 
-            if(member.getUserId().equals(UserMap.get(mapkey).getUserId())
-                    && member.getUserPassword().equals(UserMap.get(mapkey).getUserPassword())){
-                return true;
-            }
+            return member;
+
         }
-        return false;
+
+        return null;
+
+    }
+
+    public Member findById(Long id) {
+
+        return UserMap.get(id);
+
+    }
+
+
+    public void findByUserId(String userid){
+
+        //UserMap.keySet().stream().
+
+    }
+
+    public List<Member> findAll() {
+
+        return new ArrayList<>(UserMap.values());
+
+    }
+
+    public Member save(Member member){
+
+        member.setUserNumber(++sequence);
+        UserMap.put(member.getUserNumber(), member);
+        return member;
+
     }
 
 }

@@ -9,7 +9,11 @@
 <body>
 <p class="h1">로그인</p>
 <hr>
-<form action="/login" method="post" th:object="${member}">
+<form action="/login" method="post" th:object="${memberloginform}">
+    <div th:if="${#fields.hasGlobalErrors()}">
+        <p class="field-error" th:each="err : ${#fields.globalErrors()}"
+           th:text="${err}">전체 오류 메시지</p>
+    </div>
 <div class="input-group mb-3">
     <span class="input-group-text" id="basic-addon1">회원 아이디</span>
     <input type="text" class="form-control" id="UserId" th:field="*{UserId}" placeholder="회원 아이디" aria-label="Username" aria-describedby="basic-addon1">

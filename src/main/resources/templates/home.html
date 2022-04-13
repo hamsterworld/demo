@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
     <link href="../css/bootstrap.min.css" rel="stylesheet">
@@ -10,7 +11,12 @@
     <thead>
     <tr>
         <th scope="col">메뉴</th>
-        <th scope="col"><a href="/login">로그인</a></th>
+        <th scope="col" th:unless="${session.loginmember}">
+            <a href="/login">로그인</a>
+        </th>
+        <th scope="col" th:if="${session.loginmember}">
+            <a href="/logout">로그아웃</a>
+        </th>
         <th scope="col"><a href="/board/list">회원가입</a></th>
         <th scope="col"><a href="/board/list">게시판</a></th>
     </tr>
