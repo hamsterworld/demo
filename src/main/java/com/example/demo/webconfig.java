@@ -24,5 +24,7 @@ public class webconfig implements WebMvcConfigurer {
                         "/", "/members/add", "/login", "/logout",
                         "/css/**", "/*.ico", "/error"
                 );
+
     }
+
 }
