@@ -2,10 +2,13 @@ package com.example.demo.login.loginrepository;
 
 import com.example.demo.dto.Member;
 import com.example.demo.dto.MemberLoginForm;
+import com.example.demo.login.loginservice.LoginService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.catalina.User;
 import org.springframework.stereotype.Repository;
 
+import javax.annotation.PostConstruct;
 import java.util.*;
 
 
@@ -20,6 +23,7 @@ public class LoginRepositoryImpl implements LoginRepository{
 
     public Member LoginByUserId(MemberLoginForm memberloginform) {
 
+        System.out.println("=============================");
 
         Optional<Member> loginid = findAll().stream().filter(m ->
                 m.getUserId().equals(memberloginform.getUserId())).findFirst();
@@ -28,6 +32,8 @@ public class LoginRepositoryImpl implements LoginRepository{
 
         Member member = loginid.filter(m->m.getUserPassword().equals(memberloginform.getUserPassword()))
                 .orElse(null);
+
+        log.info("접속한 아이디와 비밀번호가 일치하는 회원이 있는가? = {} " + member);
 
         if(member != null){
 
@@ -65,5 +71,7 @@ public class LoginRepositoryImpl implements LoginRepository{
         return member;
 
     }
+
+
 
 }

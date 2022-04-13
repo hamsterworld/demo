@@ -12,4 +12,10 @@ public class Member {
     private String UserId;
     private String UserPassword;
 
+
+    public Member(String userId, String userPassword) {
+        UserId = userId;
+        UserPassword = userPassword;
+    }
+
 }
